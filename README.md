@@ -1,69 +1,103 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Chat Bot App – Fullstack Deployment
 
-Currently, two official plugins are available:
+## 🔧 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend:** React (Vercel)
+- **Backend:** Node.js + Express (Render)
 
-## Expanding the ESLint configuration
+## 📁 Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+chat-bot-app/
+├── client/       # React App
+├── server/       # Express API
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
+
+## 🚀 Deploy Guide
+
+### ✅ Frontend (React on Vercel)
+
+1. Push toàn bộ project lên GitHub.
+2. Truy cập [https://vercel.com](https://vercel.com), chọn **New Project**.
+3. Import GitHub repo và chọn thư mục `client/`.
+4. Vercel tự động build:
+   - Build Command: `npm run build`
+   - Output directory: `build`
+5. Sau khi deploy, frontend sẽ có URL như: `https://chat-bot-client.vercel.app`
+
+---
+
+### ✅ Backend (Express on Render)
+
+1. Truy cập [https://render.com](https://render.com), chọn **New > Web Service**.
+2. Import GitHub repo, chọn thư mục `server/`.
+3. Thiết lập:
+   - Root Directory: `server`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Environment: Node
+4. Add biến môi trường trong tab **Environment** nếu cần:
+   ```
+   PORT=10000
+   YOUR_API_KEY=xxx
+   ```
+5. Sau khi deploy, backend có URL như: `https://chat-bot-server.onrender.com`
+
+---
+
+## 🔗 Connect frontend to backend
+
+Trong file React (`client/src/...`):
 
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+const API_BASE = "https://chat-bot-server.onrender.com";
+axios.get(\`\${API_BASE}/api/route\`);
 ```
+
+---
+
+## ⚙️ CORS Setup in Express
+
+Trong `index.js` của `server/`:
+
+```js
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://chat-bot-client.vercel.app',
+  methods: ['GET', 'POST']
+}));
+```
+
+---
+
+## 📦 Sample `package.json` for Express
+
+```json
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1"
+  }
+}
+```
+
+---
+
+## ✅ Result
+
+- ✅ Frontend URL: `https://chat-bot-client.vercel.app`
+- ✅ Backend URL: `https://chat-bot-server.onrender.com`
+
+Chúc bạn deploy thành công! 🚀
+
