@@ -18,9 +18,12 @@ function App() {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      const res = await axios.post("http://localhost:3001/api/chat", {
-        message: input,
-      });
+      const res = await axios.post(
+        "https://chat-bot-server-q44g.onrender.com/api/chat",
+        {
+          message: input,
+        }
+      );
 
       const botMessage: Message = { role: "bot", content: res.data.reply };
       setMessages((prev) => [...prev, botMessage]);
